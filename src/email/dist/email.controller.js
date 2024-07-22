@@ -77,6 +77,50 @@ var EmailController = /** @class */ (function () {
             });
         });
     };
+    EmailController.prototype.updatePasswordCaptcha = function (address) {
+        return __awaiter(this, void 0, void 0, function () {
+            var code;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        code = Math.random().toString().slice(2, 8);
+                        return [4 /*yield*/, this.redisService.set("update_password_captcha_" + address, code, 10 * 60)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.emailService.sendMail({
+                                to: address,
+                                subject: '更改密码验证码',
+                                html: "<p>\u4F60\u7684\u66F4\u6539\u5BC6\u7801\u9A8C\u8BC1\u7801\u662F " + code + "</p>"
+                            })];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/, '发送成功'];
+                }
+            });
+        });
+    };
+    EmailController.prototype.updateCaptcha = function (address) {
+        return __awaiter(this, void 0, void 0, function () {
+            var code;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        code = Math.random().toString().slice(2, 8);
+                        return [4 /*yield*/, this.redisService.set("update_user_captcha_" + address, code, 10 * 60)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.emailService.sendMail({
+                                to: address,
+                                subject: '更改用户信息验证码',
+                                html: "<p>\u4F60\u7684\u9A8C\u8BC1\u7801\u662F " + code + "</p>"
+                            })];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/, '发送成功'];
+                }
+            });
+        });
+    };
     __decorate([
         common_1.Inject(email_service_1.EmailService)
     ], EmailController.prototype, "emailService");
@@ -87,6 +131,14 @@ var EmailController = /** @class */ (function () {
         common_1.Get('register-captcha'),
         __param(0, common_1.Query('address'))
     ], EmailController.prototype, "captcha");
+    __decorate([
+        common_1.Get('update_password/captcha'),
+        __param(0, common_1.Query('address'))
+    ], EmailController.prototype, "updatePasswordCaptcha");
+    __decorate([
+        common_1.Get('update/captcha'),
+        __param(0, common_1.Query('address'))
+    ], EmailController.prototype, "updateCaptcha");
     EmailController = __decorate([
         common_1.Controller('email')
     ], EmailController);

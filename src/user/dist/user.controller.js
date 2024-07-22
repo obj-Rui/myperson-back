@@ -49,6 +49,8 @@ exports.UserController = void 0;
 var common_1 = require("@nestjs/common");
 var config_1 = require("@nestjs/config");
 var jwt_1 = require("@nestjs/jwt");
+var custom_decorator_1 = require("src/custom.decorator");
+var user_info_vo_1 = require("./vo/user-info.vo");
 var UserController = /** @class */ (function () {
     function UserController(userService) {
         this.userService = userService;
@@ -199,6 +201,48 @@ var UserController = /** @class */ (function () {
             });
         });
     };
+    UserController.prototype.info = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user, vo;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userService.findUserDetailById(userId)];
+                    case 1:
+                        user = _a.sent();
+                        vo = new user_info_vo_1.UserDetailVo();
+                        vo.id = user.id;
+                        vo.email = user.email;
+                        vo.username = user.username;
+                        vo.headPic = user.headPic;
+                        vo.phoneNumber = user.phoneNumber;
+                        vo.nickName = user.nickName;
+                        vo.createTime = user.createTime;
+                        vo.isFrozen = user.isFrozen;
+                        return [2 /*return*/, vo];
+                }
+            });
+        });
+    };
+    UserController.prototype.updatePassword = function (userId, passwordDto) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userService.updatePassword(userId, passwordDto)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    UserController.prototype.update = function (userId, updateUserDto) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userService.update(userId, updateUserDto)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     __decorate([
         common_1.Post('register'),
         __param(0, common_1.Body())
@@ -228,6 +272,23 @@ var UserController = /** @class */ (function () {
         common_1.Get('admin/refresh'),
         __param(0, common_1.Query('refreshToken'))
     ], UserController.prototype, "adminRefresh");
+    __decorate([
+        common_1.Get('info'),
+        custom_decorator_1.RequireLogin(),
+        __param(0, custom_decorator_1.UserInfo('userId'))
+    ], UserController.prototype, "info");
+    __decorate([
+        common_1.Post(['update_password', 'admin/update_password']),
+        custom_decorator_1.RequireLogin(),
+        __param(0, custom_decorator_1.UserInfo('userId')),
+        __param(1, common_1.Body())
+    ], UserController.prototype, "updatePassword");
+    __decorate([
+        common_1.Post(['update', 'admin/update']),
+        custom_decorator_1.RequireLogin(),
+        __param(0, custom_decorator_1.UserInfo('userId')),
+        __param(1, common_1.Body())
+    ], UserController.prototype, "update");
     UserController = __decorate([
         common_1.Controller('user')
     ], UserController);

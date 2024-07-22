@@ -225,6 +225,100 @@ var UserService = /** @class */ (function () {
             });
         });
     };
+    UserService.prototype.findUserDetailById = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userRepository.findOne({
+                            where: {
+                                id: userId
+                            }
+                        })];
+                    case 1:
+                        user = _a.sent();
+                        return [2 /*return*/, user];
+                }
+            });
+        });
+    };
+    UserService.prototype.updatePassword = function (userId, passwordDto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var captcha, foundUser, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.redisService.get("update_password_captcha_" + passwordDto.email)];
+                    case 1:
+                        captcha = _a.sent();
+                        if (!captcha) {
+                            throw new common_1.HttpException('验证码已失效', common_1.HttpStatus.BAD_REQUEST);
+                        }
+                        if (passwordDto.captcha !== captcha) {
+                            throw new common_1.HttpException('验证码不正确', common_1.HttpStatus.BAD_REQUEST);
+                        }
+                        return [4 /*yield*/, this.userRepository.findOneBy({
+                                id: userId
+                            })];
+                    case 2:
+                        foundUser = _a.sent();
+                        foundUser.password = utils_1.md5(passwordDto.password);
+                        _a.label = 3;
+                    case 3:
+                        _a.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, this.userRepository.save(foundUser)];
+                    case 4:
+                        _a.sent();
+                        return [2 /*return*/, '密码修改成功'];
+                    case 5:
+                        e_2 = _a.sent();
+                        this.logger.error(e_2, UserService_1);
+                        return [2 /*return*/, '密码修改失败'];
+                    case 6: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserService.prototype.update = function (userId, updateUserDto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var captcha, foundUser, e_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.redisService.get("update_user_captcha_" + updateUserDto.email)];
+                    case 1:
+                        captcha = _a.sent();
+                        if (!captcha) {
+                            throw new common_1.HttpException('验证码已失效', common_1.HttpStatus.BAD_REQUEST);
+                        }
+                        if (updateUserDto.captcha !== captcha) {
+                            throw new common_1.HttpException('验证码不正确', common_1.HttpStatus.BAD_REQUEST);
+                        }
+                        return [4 /*yield*/, this.userRepository.findOneBy({
+                                id: userId
+                            })];
+                    case 2:
+                        foundUser = _a.sent();
+                        if (updateUserDto.nickName) {
+                            foundUser.nickName = updateUserDto.nickName;
+                        }
+                        if (updateUserDto.headPic) {
+                            foundUser.headPic = updateUserDto.headPic;
+                        }
+                        _a.label = 3;
+                    case 3:
+                        _a.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, this.userRepository.save(foundUser)];
+                    case 4:
+                        _a.sent();
+                        return [2 /*return*/, '用户信息修改成功'];
+                    case 5:
+                        e_3 = _a.sent();
+                        this.logger.error(e_3, UserService_1);
+                        return [2 /*return*/, '用户信息修改成功'];
+                    case 6: return [2 /*return*/];
+                }
+            });
+        });
+    };
     var UserService_1;
     __decorate([
         typeorm_1.InjectRepository(user_entity_1.User)
