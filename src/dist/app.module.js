@@ -22,6 +22,10 @@ var jwt_1 = require("@nestjs/jwt");
 var core_1 = require("@nestjs/core");
 var login_guard_1 = require("./login.guard");
 var permission_guard_1 = require("./permission.guard");
+var meeting_room_module_1 = require("./meeting-room/meeting-room.module");
+var meeting_room_entity_1 = require("./meeting-room/entities/meeting-room.entity");
+var booking_module_1 = require("./booking/booking.module");
+var booking_entity_1 = require("./booking/entities/booking.entity");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -55,7 +59,7 @@ var AppModule = /** @class */ (function () {
                             database: configService.get('mysql_server_database'),
                             synchronize: true,
                             logging: true,
-                            entities: [user_entity_1.User, role_entity_1.Role, permission_entity_1.Permission],
+                            entities: [user_entity_1.User, role_entity_1.Role, permission_entity_1.Permission, meeting_room_entity_1.MeetingRoom, booking_entity_1.Booking],
                             poolSize: 10,
                             connectorPackage: 'mysql2',
                             extra: {
@@ -68,6 +72,8 @@ var AppModule = /** @class */ (function () {
                 user_module_1.UserModule,
                 redis_module_1.RedisModule,
                 email_module_1.EmailModule,
+                meeting_room_module_1.MeetingRoomModule,
+                booking_module_1.BookingModule,
             ],
             controllers: [app_controller_1.AppController],
             providers: [
