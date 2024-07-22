@@ -47,11 +47,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.UserController = void 0;
 var common_1 = require("@nestjs/common");
+var register_user_dto_1 = require("./dto/register-user.dto");
+var login_user_dto_1 = require("./dto/login-user.dto");
 var config_1 = require("@nestjs/config");
 var jwt_1 = require("@nestjs/jwt");
 var custom_decorator_1 = require("src/custom.decorator");
 var user_info_vo_1 = require("./vo/user-info.vo");
+var update_user_password_dto_1 = require("./dto/update-user-password.dto");
+var udpate_user_dto_1 = require("./dto/udpate-user.dto");
 var utils_1 = require("src/utils");
+var swagger_1 = require("@nestjs/swagger");
+var login_user_vo_1 = require("./vo/login-user.vo");
+var refresh_token_vo_1 = require("./vo/refresh-token.vo");
 var UserController = /** @class */ (function () {
     function UserController(userService) {
         this.userService = userService;
@@ -132,7 +139,7 @@ var UserController = /** @class */ (function () {
     };
     UserController.prototype.refresh = function (refreshToken) {
         return __awaiter(this, void 0, void 0, function () {
-            var data, user, access_token, refresh_token, e_1;
+            var data, user, access_token, refresh_token, vo, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -154,10 +161,10 @@ var UserController = /** @class */ (function () {
                         }, {
                             expiresIn: this.configService.get('jwt_refresh_token_expres_time') || '7d'
                         });
-                        return [2 /*return*/, {
-                                access_token: access_token,
-                                refresh_token: refresh_token
-                            }];
+                        vo = new refresh_token_vo_1.RefreshTokenVo();
+                        vo.access_token = access_token;
+                        vo.refresh_token = refresh_token;
+                        return [2 /*return*/, vo];
                     case 2:
                         e_1 = _a.sent();
                         throw new common_1.UnauthorizedException('token 已失效，请重新登录');
@@ -267,6 +274,17 @@ var UserController = /** @class */ (function () {
         });
     };
     __decorate([
+        swagger_1.ApiBody({ type: register_user_dto_1.RegisterUserDto }),
+        swagger_1.ApiResponse({
+            status: common_1.HttpStatus.BAD_REQUEST,
+            description: '验证码已失效/验证码不正确/用户已存在',
+            type: String
+        }),
+        swagger_1.ApiResponse({
+            status: common_1.HttpStatus.OK,
+            description: '注册成功/失败',
+            type: String
+        }),
         common_1.Post('register'),
         __param(0, common_1.Body())
     ], UserController.prototype, "register");
@@ -280,6 +298,19 @@ var UserController = /** @class */ (function () {
         common_1.Inject(config_1.ConfigService)
     ], UserController.prototype, "configService");
     __decorate([
+        swagger_1.ApiBody({
+            type: login_user_dto_1.LoginUserDto
+        }),
+        swagger_1.ApiResponse({
+            status: common_1.HttpStatus.BAD_REQUEST,
+            description: '用户不存在/密码错误',
+            type: String
+        }),
+        swagger_1.ApiResponse({
+            status: common_1.HttpStatus.OK,
+            description: '用户信息和 token',
+            type: login_user_vo_1.LoginUserVo
+        }),
         common_1.Post('login'),
         __param(0, common_1.Body())
     ], UserController.prototype, "userLogin");
@@ -288,6 +319,21 @@ var UserController = /** @class */ (function () {
         __param(0, common_1.Body())
     ], UserController.prototype, "adminLogin");
     __decorate([
+        swagger_1.ApiQuery({
+            name: 'refreshToken',
+            type: String,
+            description: '刷新 token',
+            required: true,
+            example: 'xxxxxxxxyyyyyyyyzzzzz'
+        }),
+        swagger_1.ApiResponse({
+            status: common_1.HttpStatus.UNAUTHORIZED,
+            description: 'token 已失效，请重新登录'
+        }),
+        swagger_1.ApiResponse({
+            status: common_1.HttpStatus.OK,
+            description: '刷新成功'
+        }),
         common_1.Get('refresh'),
         __param(0, common_1.Query('refreshToken'))
     ], UserController.prototype, "refresh");
@@ -296,27 +342,96 @@ var UserController = /** @class */ (function () {
         __param(0, common_1.Query('refreshToken'))
     ], UserController.prototype, "adminRefresh");
     __decorate([
+        swagger_1.ApiBearerAuth(),
+        swagger_1.ApiResponse({
+            status: common_1.HttpStatus.OK,
+            description: '获取用户信息',
+            type: user_info_vo_1.UserDetailVo
+        }),
         common_1.Get('info'),
         custom_decorator_1.RequireLogin(),
         __param(0, custom_decorator_1.UserInfo('userId'))
     ], UserController.prototype, "info");
     __decorate([
+        swagger_1.ApiBearerAuth(),
+        swagger_1.ApiBody({
+            type: update_user_password_dto_1.UpdateUserPasswordDto
+        }),
+        swagger_1.ApiResponse({
+            type: String,
+            description: '验证码已失效/不正确'
+        }),
         common_1.Post(['update_password', 'admin/update_password']),
         custom_decorator_1.RequireLogin(),
         __param(0, custom_decorator_1.UserInfo('userId')),
         __param(1, common_1.Body())
     ], UserController.prototype, "updatePassword");
     __decorate([
+        swagger_1.ApiBearerAuth(),
+        swagger_1.ApiBody({
+            type: udpate_user_dto_1.UpdateUserDto
+        }),
+        swagger_1.ApiResponse({
+            status: common_1.HttpStatus.BAD_REQUEST,
+            description: '验证码已失效/不正确'
+        }),
+        swagger_1.ApiResponse({
+            status: common_1.HttpStatus.OK,
+            description: '更新成功',
+            type: String
+        }),
         common_1.Post(['update', 'admin/update']),
         custom_decorator_1.RequireLogin(),
         __param(0, custom_decorator_1.UserInfo('userId')),
         __param(1, common_1.Body())
     ], UserController.prototype, "update");
     __decorate([
+        swagger_1.ApiBearerAuth(),
+        swagger_1.ApiQuery({
+            name: 'id',
+            description: 'userId',
+            type: Number
+        }),
+        swagger_1.ApiResponse({
+            type: String,
+            description: 'success'
+        }),
+        custom_decorator_1.RequireLogin(),
         common_1.Get('freeze'),
         __param(0, common_1.Query('id'))
     ], UserController.prototype, "freeze");
     __decorate([
+        swagger_1.ApiBearerAuth(),
+        swagger_1.ApiQuery({
+            name: 'pageNo',
+            description: '第几页',
+            type: Number
+        }),
+        swagger_1.ApiQuery({
+            name: 'pageSize',
+            description: '每页多少条',
+            type: Number
+        }),
+        swagger_1.ApiQuery({
+            name: 'username',
+            description: '用户名',
+            type: Number
+        }),
+        swagger_1.ApiQuery({
+            name: 'nickName',
+            description: '昵称',
+            type: Number
+        }),
+        swagger_1.ApiQuery({
+            name: 'email',
+            description: '邮箱地址',
+            type: Number
+        }),
+        swagger_1.ApiResponse({
+            type: String,
+            description: '用户列表'
+        }),
+        custom_decorator_1.RequireLogin(),
         common_1.Get('list'),
         __param(0, common_1.Query('pageNo', new common_1.DefaultValuePipe(1), utils_1.generateParseIntPipe('pageNo'))),
         __param(1, common_1.Query('pageSize', new common_1.DefaultValuePipe(2), utils_1.generateParseIntPipe('pageSize'))),
@@ -325,6 +440,7 @@ var UserController = /** @class */ (function () {
         __param(4, common_1.Query('email'))
     ], UserController.prototype, "list");
     UserController = __decorate([
+        swagger_1.ApiTags('用户模块'),
         common_1.Controller('user')
     ], UserController);
     return UserController;

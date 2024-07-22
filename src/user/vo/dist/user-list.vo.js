@@ -6,35 +6,48 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-exports.UserDetailVo = void 0;
+exports.UserListVo = void 0;
 var swagger_1 = require("@nestjs/swagger");
-var UserDetailVo = /** @class */ (function () {
-    function UserDetailVo() {
+var User = /** @class */ (function () {
+    function User() {
     }
     __decorate([
         swagger_1.ApiProperty()
-    ], UserDetailVo.prototype, "id");
+    ], User.prototype, "id");
     __decorate([
         swagger_1.ApiProperty()
-    ], UserDetailVo.prototype, "username");
+    ], User.prototype, "username");
     __decorate([
         swagger_1.ApiProperty()
-    ], UserDetailVo.prototype, "nickName");
+    ], User.prototype, "nickName");
     __decorate([
         swagger_1.ApiProperty()
-    ], UserDetailVo.prototype, "email");
+    ], User.prototype, "email");
     __decorate([
         swagger_1.ApiProperty()
-    ], UserDetailVo.prototype, "headPic");
+    ], User.prototype, "phoneNumber");
     __decorate([
         swagger_1.ApiProperty()
-    ], UserDetailVo.prototype, "phoneNumber");
+    ], User.prototype, "isFrozen");
     __decorate([
         swagger_1.ApiProperty()
-    ], UserDetailVo.prototype, "isFrozen");
+    ], User.prototype, "headPic");
     __decorate([
         swagger_1.ApiProperty()
-    ], UserDetailVo.prototype, "createTime");
-    return UserDetailVo;
+    ], User.prototype, "createTime");
+    return User;
 }());
-exports.UserDetailVo = UserDetailVo;
+var UserListVo = /** @class */ (function () {
+    function UserListVo() {
+    }
+    __decorate([
+        swagger_1.ApiProperty({
+            type: [User]
+        })
+    ], UserListVo.prototype, "users");
+    __decorate([
+        swagger_1.ApiProperty()
+    ], UserListVo.prototype, "totalCount");
+    return UserListVo;
+}());
+exports.UserListVo = UserListVo;

@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 exports.__esModule = true;
 exports.LoginUserDto = void 0;
+var swagger_1 = require("@nestjs/swagger");
 var class_validator_1 = require("class-validator");
 var LoginUserDto = /** @class */ (function () {
     function LoginUserDto() {
@@ -14,12 +15,14 @@ var LoginUserDto = /** @class */ (function () {
     __decorate([
         class_validator_1.IsNotEmpty({
             message: '用户名不能为空'
-        })
+        }),
+        swagger_1.ApiProperty()
     ], LoginUserDto.prototype, "username");
     __decorate([
         class_validator_1.IsNotEmpty({
             message: '密码不能为空'
-        })
+        }),
+        swagger_1.ApiProperty()
     ], LoginUserDto.prototype, "password");
     return LoginUserDto;
 }());

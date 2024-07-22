@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 exports.__esModule = true;
 exports.UpdateUserPasswordDto = void 0;
+var swagger_1 = require("@nestjs/swagger");
 var class_validator_1 = require("class-validator");
 var UpdateUserPasswordDto = /** @class */ (function () {
     function UpdateUserPasswordDto() {
@@ -17,7 +18,8 @@ var UpdateUserPasswordDto = /** @class */ (function () {
         }),
         class_validator_1.MinLength(6, {
             message: '密码不能少于 6 位'
-        })
+        }),
+        swagger_1.ApiProperty()
     ], UpdateUserPasswordDto.prototype, "password");
     __decorate([
         class_validator_1.IsNotEmpty({
@@ -25,12 +27,14 @@ var UpdateUserPasswordDto = /** @class */ (function () {
         }),
         class_validator_1.IsEmail({}, {
             message: '不是合法的邮箱格式'
-        })
+        }),
+        swagger_1.ApiProperty()
     ], UpdateUserPasswordDto.prototype, "email");
     __decorate([
         class_validator_1.IsNotEmpty({
             message: '验证码不能为空'
-        })
+        }),
+        swagger_1.ApiProperty()
     ], UpdateUserPasswordDto.prototype, "captcha");
     return UpdateUserPasswordDto;
 }());

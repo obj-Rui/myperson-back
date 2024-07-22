@@ -49,6 +49,8 @@ exports.EmailController = void 0;
 var common_1 = require("@nestjs/common");
 var email_service_1 = require("./email.service");
 var redis_service_1 = require("src/redis/redis.service");
+var swagger_1 = require("@nestjs/swagger");
+var custom_decorator_1 = require("src/custom.decorator");
 var EmailController = /** @class */ (function () {
     function EmailController() {
     }
@@ -128,10 +130,33 @@ var EmailController = /** @class */ (function () {
         common_1.Inject(redis_service_1.RedisService)
     ], EmailController.prototype, "redisService");
     __decorate([
+        swagger_1.ApiQuery({
+            name: 'address',
+            description: '邮箱地址',
+            type: String,
+            required: true,
+            example: 'example@example.com'
+        }),
+        swagger_1.ApiResponse({
+            status: common_1.HttpStatus.OK,
+            description: '发送成功',
+            type: String
+        }),
         common_1.Get('register-captcha'),
         __param(0, common_1.Query('address'))
     ], EmailController.prototype, "captcha");
     __decorate([
+        swagger_1.ApiBearerAuth(),
+        swagger_1.ApiQuery({
+            name: 'address',
+            description: '邮箱地址',
+            type: String
+        }),
+        swagger_1.ApiResponse({
+            type: String,
+            description: '发送成功'
+        }),
+        custom_decorator_1.RequireLogin(),
         common_1.Get('update_password/captcha'),
         __param(0, common_1.Query('address'))
     ], EmailController.prototype, "updatePasswordCaptcha");
@@ -140,6 +165,7 @@ var EmailController = /** @class */ (function () {
         __param(0, common_1.Query('address'))
     ], EmailController.prototype, "updateCaptcha");
     EmailController = __decorate([
+        swagger_1.ApiTags('邮箱模块'),
         common_1.Controller('email')
     ], EmailController);
     return EmailController;

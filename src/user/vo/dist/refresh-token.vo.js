@@ -6,30 +6,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-exports.UpdateUserDto = void 0;
+exports.RefreshTokenVo = void 0;
 var swagger_1 = require("@nestjs/swagger");
-var class_validator_1 = require("class-validator");
-var UpdateUserDto = /** @class */ (function () {
-    function UpdateUserDto() {
+var RefreshTokenVo = /** @class */ (function () {
+    function RefreshTokenVo() {
     }
     __decorate([
         swagger_1.ApiProperty()
-    ], UpdateUserDto.prototype, "nickName");
+    ], RefreshTokenVo.prototype, "access_token");
     __decorate([
-        class_validator_1.IsNotEmpty({
-            message: '邮箱不能为空'
-        }),
-        class_validator_1.IsEmail({}, {
-            message: '不是合法的邮箱格式'
-        }),
         swagger_1.ApiProperty()
-    ], UpdateUserDto.prototype, "email");
-    __decorate([
-        class_validator_1.IsNotEmpty({
-            message: '验证码不能为空'
-        }),
-        swagger_1.ApiProperty()
-    ], UpdateUserDto.prototype, "captcha");
-    return UpdateUserDto;
+    ], RefreshTokenVo.prototype, "refresh_token");
+    return RefreshTokenVo;
 }());
-exports.UpdateUserDto = UpdateUserDto;
+exports.RefreshTokenVo = RefreshTokenVo;

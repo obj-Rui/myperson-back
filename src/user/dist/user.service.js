@@ -52,6 +52,7 @@ var redis_service_1 = require("src/redis/redis.service");
 var role_entity_1 = require("./entities/role.entity");
 var permission_entity_1 = require("./entities/permission.entity");
 var login_user_vo_1 = require("./vo/login-user.vo");
+var user_list_vo_1 = require("./vo/user-list.vo");
 var UserService = /** @class */ (function () {
     function UserService() {
         this.logger = new common_1.Logger();
@@ -372,7 +373,7 @@ var UserService = /** @class */ (function () {
     };
     UserService.prototype.findUsers = function (username, nickName, email, pageNo, pageSize) {
         return __awaiter(this, void 0, void 0, function () {
-            var skipCount, condition, _a, users, totalCount;
+            var skipCount, condition, _a, users, totalCount, vo;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -404,10 +405,10 @@ var UserService = /** @class */ (function () {
                             })];
                     case 1:
                         _a = _b.sent(), users = _a[0], totalCount = _a[1];
-                        return [2 /*return*/, {
-                                users: users,
-                                totalCount: totalCount
-                            }];
+                        vo = new user_list_vo_1.UserListVo();
+                        vo.users = users;
+                        vo.totalCount = totalCount;
+                        return [2 /*return*/, vo];
                 }
             });
         });

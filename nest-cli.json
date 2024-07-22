@@ -5,7 +5,8 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "watchAssets": true,
-    "assets": ["**/*.env"]
+    "assets": ["**/*.env"],
+    "plugins": ["@nextjs/swagger"]
   },
   "generateOptions": {
     "spec": false

@@ -44,9 +44,10 @@ var format_response_interceptor_1 = require("./format-response.interceptor");
 var invoke_record_interceptor_1 = require("./invoke-record.interceptor");
 var unlogin_filter_1 = require("./unlogin.filter");
 var custom_exception_filter_1 = require("./custom-exception.filter");
+var swagger_1 = require("@nestjs/swagger");
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function () {
-        var app, configService;
+        var app, config, document, configService;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, core_1.NestFactory.create(app_module_1.AppModule)];
@@ -57,6 +58,17 @@ function bootstrap() {
                     app.useGlobalInterceptors(new invoke_record_interceptor_1.InvokeRecordInterceptor());
                     app.useGlobalFilters(new unlogin_filter_1.UnloginFilter());
                     app.useGlobalFilters(new custom_exception_filter_1.CustomExceptionFilter());
+                    config = new swagger_1.DocumentBuilder()
+                        .setTitle('xiaodi-server')
+                        .setDescription('api 接口文档')
+                        .setVersion('1.0')
+                        .addBearerAuth({
+                        type: 'http',
+                        description: '基于jwt认证'
+                    }) // 添加认证
+                        .build();
+                    document = swagger_1.SwaggerModule.createDocument(app, config);
+                    swagger_1.SwaggerModule.setup('api-doc', app, document);
                     configService = app.get(config_1.ConfigService);
                     return [4 /*yield*/, app.listen(configService.get('nest_server_port'))];
                 case 2:
