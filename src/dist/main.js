@@ -42,6 +42,8 @@ var common_1 = require("@nestjs/common");
 var config_1 = require("@nestjs/config");
 var format_response_interceptor_1 = require("./format-response.interceptor");
 var invoke_record_interceptor_1 = require("./invoke-record.interceptor");
+var unlogin_filter_1 = require("./unlogin.filter");
+var custom_exception_filter_1 = require("./custom-exception.filter");
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function () {
         var app, configService;
@@ -53,6 +55,8 @@ function bootstrap() {
                     app.useGlobalPipes(new common_1.ValidationPipe());
                     app.useGlobalInterceptors(new format_response_interceptor_1.FormatResponseInterceptor());
                     app.useGlobalInterceptors(new invoke_record_interceptor_1.InvokeRecordInterceptor());
+                    app.useGlobalFilters(new unlogin_filter_1.UnloginFilter());
+                    app.useGlobalFilters(new custom_exception_filter_1.CustomExceptionFilter());
                     configService = app.get(config_1.ConfigService);
                     return [4 /*yield*/, app.listen(configService.get('nest_server_port'))];
                 case 2:

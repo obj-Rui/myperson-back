@@ -9,6 +9,7 @@ exports.__esModule = true;
 exports.LoginGuard = void 0;
 var common_1 = require("@nestjs/common");
 var jwt_1 = require("@nestjs/jwt");
+var unlogin_filter_1 = require("./unlogin.filter");
 var LoginGuard = /** @class */ (function () {
     function LoginGuard() {
     }
@@ -37,7 +38,7 @@ var LoginGuard = /** @class */ (function () {
             return true;
         }
         catch (e) {
-            throw new common_1.UnauthorizedException('token 失效，请重新登录');
+            throw new unlogin_filter_1.UnLoginException('token 失效，请重新登录');
         }
     };
     __decorate([

@@ -51,6 +51,7 @@ var config_1 = require("@nestjs/config");
 var jwt_1 = require("@nestjs/jwt");
 var custom_decorator_1 = require("src/custom.decorator");
 var user_info_vo_1 = require("./vo/user-info.vo");
+var utils_1 = require("src/utils");
 var UserController = /** @class */ (function () {
     function UserController(userService) {
         this.userService = userService;
@@ -243,6 +244,28 @@ var UserController = /** @class */ (function () {
             });
         });
     };
+    UserController.prototype.freeze = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userService.freezeUserById(userId)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, 'success'];
+                }
+            });
+        });
+    };
+    UserController.prototype.list = function (pageNo, pageSize, username, nickName, email) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userService.findUsers(username, nickName, email, pageNo, pageSize)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     __decorate([
         common_1.Post('register'),
         __param(0, common_1.Body())
@@ -289,6 +312,18 @@ var UserController = /** @class */ (function () {
         __param(0, custom_decorator_1.UserInfo('userId')),
         __param(1, common_1.Body())
     ], UserController.prototype, "update");
+    __decorate([
+        common_1.Get('freeze'),
+        __param(0, common_1.Query('id'))
+    ], UserController.prototype, "freeze");
+    __decorate([
+        common_1.Get('list'),
+        __param(0, common_1.Query('pageNo', new common_1.DefaultValuePipe(1), utils_1.generateParseIntPipe('pageNo'))),
+        __param(1, common_1.Query('pageSize', new common_1.DefaultValuePipe(2), utils_1.generateParseIntPipe('pageSize'))),
+        __param(2, common_1.Query('username')),
+        __param(3, common_1.Query('nickName')),
+        __param(4, common_1.Query('email'))
+    ], UserController.prototype, "list");
     UserController = __decorate([
         common_1.Controller('user')
     ], UserController);

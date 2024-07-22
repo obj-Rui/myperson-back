@@ -46,6 +46,7 @@ exports.UserService = void 0;
 var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
 var utils_1 = require("src/utils");
+var typeorm_2 = require("typeorm");
 var user_entity_1 = require("./entities/user.entity");
 var redis_service_1 = require("src/redis/redis.service");
 var role_entity_1 = require("./entities/role.entity");
@@ -315,6 +316,98 @@ var UserService = /** @class */ (function () {
                         this.logger.error(e_3, UserService_1);
                         return [2 /*return*/, '用户信息修改成功'];
                     case 6: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserService.prototype.freezeUserById = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userRepository.findOneBy({
+                            id: id
+                        })];
+                    case 1:
+                        user = _a.sent();
+                        user.isFrozen = true;
+                        return [4 /*yield*/, this.userRepository.save(user)];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserService.prototype.findUsersByPage = function (pageNo, pageSize) {
+        return __awaiter(this, void 0, void 0, function () {
+            var skipCount, _a, users, totalCount;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        skipCount = (pageNo - 1) * pageSize;
+                        return [4 /*yield*/, this.userRepository.findAndCount({
+                                select: [
+                                    'id',
+                                    'username',
+                                    'nickName',
+                                    'email',
+                                    'phoneNumber',
+                                    'isFrozen',
+                                    'headPic',
+                                    'createTime',
+                                ],
+                                skip: skipCount,
+                                take: pageSize
+                            })];
+                    case 1:
+                        _a = _b.sent(), users = _a[0], totalCount = _a[1];
+                        return [2 /*return*/, {
+                                users: users,
+                                totalCount: totalCount
+                            }];
+                }
+            });
+        });
+    };
+    UserService.prototype.findUsers = function (username, nickName, email, pageNo, pageSize) {
+        return __awaiter(this, void 0, void 0, function () {
+            var skipCount, condition, _a, users, totalCount;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        skipCount = (pageNo - 1) * pageSize;
+                        condition = {};
+                        if (username) {
+                            condition.username = typeorm_2.Like("%" + username + "%");
+                        }
+                        if (nickName) {
+                            condition.nickName = typeorm_2.Like("%" + nickName + "%");
+                        }
+                        if (email) {
+                            condition.email = typeorm_2.Like("%" + email + "%");
+                        }
+                        return [4 /*yield*/, this.userRepository.findAndCount({
+                                select: [
+                                    'id',
+                                    'username',
+                                    'nickName',
+                                    'email',
+                                    'phoneNumber',
+                                    'isFrozen',
+                                    'headPic',
+                                    'createTime',
+                                ],
+                                skip: skipCount,
+                                take: pageSize,
+                                where: condition
+                            })];
+                    case 1:
+                        _a = _b.sent(), users = _a[0], totalCount = _a[1];
+                        return [2 /*return*/, {
+                                users: users,
+                                totalCount: totalCount
+                            }];
                 }
             });
         });
