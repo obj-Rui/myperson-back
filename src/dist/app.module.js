@@ -26,6 +26,8 @@ var meeting_room_module_1 = require("./meeting-room/meeting-room.module");
 var meeting_room_entity_1 = require("./meeting-room/entities/meeting-room.entity");
 var booking_module_1 = require("./booking/booking.module");
 var booking_entity_1 = require("./booking/entities/booking.entity");
+var statistic_module_1 = require("./statistic/statistic.module");
+var path = require("path");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -46,7 +48,8 @@ var AppModule = /** @class */ (function () {
                 }),
                 config_1.ConfigModule.forRoot({
                     isGlobal: true,
-                    envFilePath: 'src/.env'
+                    // envFilePath: 'src/.env',
+                    envFilePath: path.join(__dirname, '.env')
                 }),
                 typeorm_1.TypeOrmModule.forRootAsync({
                     useFactory: function (configService) {
@@ -74,6 +77,7 @@ var AppModule = /** @class */ (function () {
                 email_module_1.EmailModule,
                 meeting_room_module_1.MeetingRoomModule,
                 booking_module_1.BookingModule,
+                statistic_module_1.StatisticModule,
             ],
             controllers: [app_controller_1.AppController],
             providers: [
