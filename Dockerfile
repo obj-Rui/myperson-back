@@ -1,4 +1,4 @@
-FROM node as build-stage
+FROM swr.cn-south-1.myhuaweicloud.com/wang/node18 as build-stage
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY . .
 RUN npm run build
 
 # production stage
-FROM node as production-stage
+FROM swr.cn-south-1.myhuaweicloud.com/wang/node18 as production-stage
 
 COPY --from=build-stage /app/dist /app
 COPY --from=build-stage /app/package.json /app/package.json
