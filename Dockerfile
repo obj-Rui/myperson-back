@@ -6,7 +6,13 @@ COPY package.json .
 
 RUN npm config set registry https://registry.npmmirror.com/
 
-RUN npm install
+RUN echo "pnpm install"
+RUN npm install pnpm
+
+RUN echo "pnpm install"
+RUN pnpm install
+
+# build stage
 
 COPY . .
 
