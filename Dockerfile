@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json .
 
-RUN npm config set registry registry https://mirrors.huaweicloud.com/repository/npm/
+RUN npm config set registry  https://mirrors.huaweicloud.com/repository/npm/
 
 RUN npm install
 
@@ -20,7 +20,7 @@ COPY --from=build-stage /app/package.json /app/package.json
 
 WORKDIR /app
 
-RUN npm config set registry registry https://mirrors.huaweicloud.com/repository/npm/
+RUN npm config set registry  https://mirrors.huaweicloud.com/repository/npm/
 
 RUN npm install --production
 
